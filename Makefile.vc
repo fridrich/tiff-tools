@@ -3,17 +3,8 @@
 #
 #	To build:
 #       C:\libtiff\tools> nmake /f makefile.vc 
-#
-# Uncomment and edit following lines to enable JPEG support
-#JPEG_SUPPORT	= 1
-#JPEGDIR 	= d:/projects/jpeg-6b
-#JPEG_LIB 	= $(JPEGDIR)/Release/jpeg.lib
 
-# Uncomment and edit following lines to enable ZIP support
-# (required for Deflate compression)
-#ZIP_SUPPORT	= 1
-#ZLIBDIR 	= d:/projects/zlib-1.2.1
-#ZLIB_LIB 	= $(ZLIBDIR)/zlib.lib
+!INCLUDE ..\nmake.opt
 
 TARGETS	=	tiffcp.exe tiffinfo.exe tiffdump.exe fax2tiff.exe \
 		fax2ps.exe gif2tiff.exe pal2rgb.exe ppm2tiff.exe \
@@ -23,15 +14,8 @@ TARGETS	=	tiffcp.exe tiffinfo.exe tiffdump.exe fax2tiff.exe \
 
 EXTRA_OBJ 	= 	strcasecmp.obj getopt.obj
 
-LIBS		=	..\libtiff\libtiff.lib
-EXTRAFLAGS	=
-
-!IFDEF JPEG_SUPPORT
-LIBS		= $(LIBS) $(JPEG_LIB)
-EXTRAFLAGS	= $(EXTRAFLAGS) -DJPEG_SUPPORT
-!ENDIF
-
-CFLAGS 	=	/nologo -I..\libtiff /D_WINDOWS $(EXTRAFLAGS)
+INCL		= 	-I..\libtiff
+LIBS		=	$(LIBS) ..\libtiff\libtiff.lib
 
 default:	$(EXTRA_OBJ) $(TARGETS)
 
@@ -48,4 +32,4 @@ strcasecmp.obj:	..\port\strcasecmp.c
 	$(CC) /c $(CFLAGS) ..\port\strcasecmp.c
 
 clean:
-	del *.obj *.exe
+	-del *.exe *.obj
