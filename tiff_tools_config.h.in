@@ -6,23 +6,7 @@
 
 /* libtiff/tiff_tools_config.h.in.  Not generated, but originated from autoheader.  */
 
-#include "tiffconf.h"
-
-/* Support CCITT Group 3 & 4 algorithms */
-#undef CCITT_SUPPORT
-
-/* Pick up YCbCr subsampling info from the JPEG data stream to support files
-   lacking the tag (default enabled). */
-#undef CHECK_JPEG_YCBCR_SUBSAMPLING
-
-/* enable partial strip reading for large strips (experimental) */
-#undef CHUNKY_STRIP_READ_SUPPORT
-
-/* Support C++ stream API (requires C++ compiler) */
-#undef CXX_SUPPORT
-
-/* enable deferred strip/tile offset/size loading */
-#undef DEFER_STRILE_LOAD
+#include <tiffconf.h>
 
 /* Define to 1 if you have the <assert.h> header file. */
 #undef HAVE_ASSERT_H
@@ -85,15 +69,6 @@
 /* 8/12 bit libjpeg dual mode enabled */
 #undef JPEG_DUAL_MODE_8_12
 
-/* Support LERC compression */
-#undef LERC_SUPPORT
-
-/* 12bit libjpeg primary include file with path */
-#undef LIBJPEG_12_PATH
-
-/* Support LZMA2 compression */
-#undef LZMA_SUPPORT
-
 /* Name of package */
 #undef PACKAGE
 
@@ -118,20 +93,8 @@
 /* The size of `size_t', as computed by sizeof. */
 #undef SIZEOF_SIZE_T
 
-/* Default size of the strip in bytes (when strip chopping enabled) */
-#undef STRIP_SIZE_DEFAULT
-
-/* Maximum number of TIFF IFDs that libtiff can iterate through in a file. */
-#undef TIFF_MAX_DIR_COUNT
-
-/* define to use win32 IO system */
-#undef USE_WIN32_FILEIO
-
 /* Version number of package */
 #undef VERSION
-
-/* Support webp compression */
-#undef WEBP_SUPPORT
 
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */

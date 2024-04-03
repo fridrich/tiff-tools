@@ -24,11 +24,9 @@
 
 # Process this file with automake to produce Makefile.in.
 
-docdir = $(LIBTIFF_DOCDIR)/manual
-
 if SPHINX
 doc-man:
-	$(SPHINX_BUILD) \
+	$(SPHINX_BUILD) -q \
 	-D "release=$(TIFF_TOOLS_VERSION)" \
 	-D "version=$(TIFF_TOOLS_MAJOR_VERSION).$(TIFF_TOOLS_MINOR_VERSION)" \
 	-d "$(builddir)/cache" \

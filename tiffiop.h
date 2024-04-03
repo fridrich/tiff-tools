@@ -50,10 +50,6 @@
 
 #include <limits.h>
 
-#ifndef STRIP_SIZE_DEFAULT
-#define STRIP_SIZE_DEFAULT 8192
-#endif
-
 #ifndef TIFF_MAX_DIR_COUNT
 #define TIFF_MAX_DIR_COUNT 1048576
 #endif
@@ -119,7 +115,6 @@ struct tiff
 #define TIFF_POSTENCODE 0x01000U  /* need call to postencode routine */
 #define TIFF_INSUBIFD 0x02000U    /* currently writing a subifd */
 #define TIFF_UPSAMPLED 0x04000U   /* library is doing data up-sampling */
-#define TIFF_STRIPCHOP 0x08000U   /* enable strip chopping support */
 #define TIFF_HEADERONLY                                                        \
     0x10000U /* read header only, do not process the first directory */
 #define TIFF_NOREADRAW                                                         \
@@ -137,9 +132,6 @@ struct tiff
     0x2000000U /* lazy/ondemand loading of strip/tile offset/bytecount values. \
                   Only used if TIFF_DEFERSTRILELOAD is set and in read-only    \
                   mode */
-#define TIFF_CHOPPEDUPARRAYS                                                   \
-    0x4000000U /* set when allocChoppedUpStripArrays() has modified strip      \
-                  array */
     uint64_t tif_diroff;     /* file offset of current directory */
     uint64_t tif_nextdiroff; /* file offset of following directory */
     uint64_t tif_lastdiroff; /* file offset of last directory written so far */
@@ -453,53 +445,6 @@ extern "C"
     extern int _TIFFSeekOK(TIFF *tif, toff_t off);
 
     extern int TIFFInitDumpMode(TIFF *, int);
-#ifdef PACKBITS_SUPPORT
-    extern int TIFFInitPackBits(TIFF *, int);
-#endif
-#ifdef CCITT_SUPPORT
-    extern int TIFFInitCCITTRLE(TIFF *, int), TIFFInitCCITTRLEW(TIFF *, int);
-    extern int TIFFInitCCITTFax3(TIFF *, int), TIFFInitCCITTFax4(TIFF *, int);
-#endif
-#ifdef THUNDER_SUPPORT
-    extern int TIFFInitThunderScan(TIFF *, int);
-#endif
-#ifdef NEXT_SUPPORT
-    extern int TIFFInitNeXT(TIFF *, int);
-#endif
-#ifdef LZW_SUPPORT
-    extern int TIFFInitLZW(TIFF *, int);
-#endif
-#ifdef OJPEG_SUPPORT
-    extern int TIFFInitOJPEG(TIFF *, int);
-#endif
-#ifdef JPEG_SUPPORT
-    extern int TIFFInitJPEG(TIFF *, int);
-    extern int TIFFJPEGIsFullStripRequired(TIFF *);
-#endif
-#ifdef JBIG_SUPPORT
-    extern int TIFFInitJBIG(TIFF *, int);
-#endif
-#ifdef ZIP_SUPPORT
-    extern int TIFFInitZIP(TIFF *, int);
-#endif
-#ifdef PIXARLOG_SUPPORT
-    extern int TIFFInitPixarLog(TIFF *, int);
-#endif
-#ifdef LOGLUV_SUPPORT
-    extern int TIFFInitSGILog(TIFF *, int);
-#endif
-#ifdef LERC_SUPPORT
-    extern int TIFFInitLERC(TIFF *tif, int);
-#endif
-#ifdef LZMA_SUPPORT
-    extern int TIFFInitLZMA(TIFF *, int);
-#endif
-#ifdef ZSTD_SUPPORT
-    extern int TIFFInitZSTD(TIFF *, int);
-#endif
-#ifdef WEBP_SUPPORT
-    extern int TIFFInitWebP(TIFF *, int);
-#endif
     extern const TIFFCodec _TIFFBuiltinCODECS[];
     extern void TIFFCIELab16ToXYZ(TIFFCIELabToRGB *, uint32_t l, int32_t a,
                                   int32_t b, float *, float *, float *);

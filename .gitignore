@@ -49,6 +49,7 @@ tiffinfo
 tiffmedian
 tiffset
 tiffsplit
+tiff_tools_config.h
 *~
 .idea
 .vs

@@ -26,6 +26,8 @@
 SUBDIRS = doc
 
 EXTRA_DIST = \
+	list-manpage-dependencies.py \
+	list-manpages.py \
 	tif_tools_versioninfo.rc
 
 bin_PROGRAMS = \
@@ -34,6 +36,8 @@ bin_PROGRAMS = \
 	pal2rgb \
 	ppm2tiff \
 	raw2tiff \
+	rgb2ycbcr \
+	thumbnail \
 	tiff2bw \
 	tiff2pdf \
 	tiff2ps \
@@ -51,17 +55,8 @@ if HAVE_OPENGL
 bin_PROGRAMS += tiffgt
 endif
 
-EXTRA_PROGRAMS = rgb2ycbcr thumbnail
-
 noinst_HEADERS = \
 	tiffiop.h
-
-# Executable programs which need to be built in order to support tests
-if TIFF_TESTS
-check_PROGRAMS = \
-	rgb2ycbcr \
-	thumbnail
-endif
 
 fax2ps_SOURCES = fax2ps.c
 fax2ps_LDADD = $(LIBTIFF_LIBS)
