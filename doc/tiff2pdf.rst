@@ -208,4 +208,3 @@ See also
 
 :doc:`tiffcp` (1),
 :doc:`tiff2ps` (1),
-:doc:`/functions/libtiff` (3tiff),

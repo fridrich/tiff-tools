@@ -184,9 +184,7 @@ AM_CONDITIONAL(TIFF_TESTS, test "$TIFF_TESTS" = "yes")
 dnl ---------------------------------------------------------------------------
 dnl Find libtiff.
 dnl ---------------------------------------------------------------------------
-PKG_CHECK_MODULES([LIBTIFF],[
-    libtiff-4
-])
+PKG_CHECK_MODULES([LIBTIFF],[libtiff-4])
 AC_SUBST([LIBTIFF_CFLAGS])
 AC_SUBST([LIBTIFF_LIBS])
 

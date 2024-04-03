@@ -29,11 +29,11 @@ docdir = $(LIBTIFF_DOCDIR)/manual
 if SPHINX
 doc-man:
 	$(SPHINX_BUILD) \
-	-D "release=$(LIBTIFF_VERSION)" \
-	-D "version=$(LIBTIFF_MAJOR_VERSION).$(LIBTIFF_MINOR_VERSION)" \
+	-D "release=$(TIFF_TOOLS_VERSION)" \
+	-D "version=$(TIFF_TOOLS_MAJOR_VERSION).$(TIFF_TOOLS_MINOR_VERSION)" \
 	-d "$(builddir)/cache" \
 	-b man \
-	"$(srcdir)" "$(builddir)/man"
+	"$(srcdir)" "$(builddir)/man" $(rst_sources)
 
 man1_MANS = $(TIFF_MAN1_GEN)
 
@@ -42,7 +42,6 @@ man1_MANS = $(TIFF_MAN1_GEN)
 all-local: doc-html doc-man
 
 clean-local:
-	rm -r html
 	rm -r man
 	rm -r cache
 else
@@ -55,50 +54,34 @@ man1_MANS = $(TIFF_MAN1_PREBUILT)
 endif
 
 
-install-data-local: all-local
-	find $(html_installdir) -type d | sed -e 's;^$(html_installdir);;' | while read dir; do \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(docdir)$$dir'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(docdir)$$dir" || exit 1; \
-	done
-	find $(html_installdir) -type f | sed -e 's;^$(html_installdir);;' | while read docfile; do \
-	  docsubdir=$$(dirname $$docfile); \
-	  echo "$(INSTALL_DATA) '$(html_installdir)$$docfile' '$(DESTDIR)$(docdir)$$docsubdir'"; \
-	  $(INSTALL_DATA) "$(html_installdir)$$docfile" "$(DESTDIR)$(docdir)$$docsubdir"; \
-	done
-
-uninstall-local:
-	echo "rm -r $(DESTDIR)$(docdir)"
-	rm -r $(DESTDIR)$(docdir)
-
 rst_sources = \
-	tools/tiffgt.rst \
-	tools/tiffdither.rst \
-	tools/tiff2pdf.rst \
-	tools/tiff2ps.rst \
-	tools/ppm2tiff.rst \
-	tools/raw2tiff.rst \
-	tools/fax2tiff.rst \
-	tools/tiffcrop.rst \
-	tools/tiff2bw.rst \
-	tools/fax2ps.rst \
-	tools/thumbnail.rst \
-	tools/tiffcmp.rst \
-	tools/tiffdump.rst \
-	tools/tiff2rgba.rst \
-	tools/tiffinfo.rst \
-	tools/rgb2ycbcr.rst \
-	tools/tiffset.rst \
-	tools/tiffsplit.rst \
-	tools/tiffmedian.rst \
-	tools/pal2rgb.rst \
-	tools/tiffcp.rst
+	tiffgt.rst \
+	tiffdither.rst \
+	tiff2pdf.rst \
+	tiff2ps.rst \
+	ppm2tiff.rst \
+	raw2tiff.rst \
+	fax2tiff.rst \
+	tiffcrop.rst \
+	tiff2bw.rst \
+	fax2ps.rst \
+	thumbnail.rst \
+	tiffcmp.rst \
+	tiffdump.rst \
+	tiff2rgba.rst \
+	tiffinfo.rst \
+	rgb2ycbcr.rst \
+	tiffset.rst \
+	tiffsplit.rst \
+	tiffmedian.rst \
+	pal2rgb.rst \
+	tiffcp.rst
 
 EXTRA_DIST = \
 	conf.py \
 	$(rst_sources)
 
 dist-hook: doc-html doc-man
-	cp -r html $(distdir)/html-prebuilt
 	cp -r man $(distdir)/man-prebuilt
 
 .PHONY: doc-html doc-man

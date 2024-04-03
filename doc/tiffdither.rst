@@ -90,4 +90,3 @@ See also
 :doc:`fax2tiff` (1),
 :doc:`tiffinfo` (1),
 :doc:`tiffcp` (1),
-:doc:`tiff2bw` (3tiff)

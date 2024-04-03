@@ -49,4 +49,3 @@ See also
 --------
 
 :doc:`tiffinfo` (1),
-:doc:`/functions/libtiff` (3tiff)

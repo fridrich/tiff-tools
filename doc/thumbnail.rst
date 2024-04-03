@@ -63,4 +63,3 @@ See also
 :doc:`tiffdump` (1),
 :doc:`tiffgt` (1),
 :doc:`tiffinfo` (1),
-:doc:`/functions/libtiff` (3tiff),
