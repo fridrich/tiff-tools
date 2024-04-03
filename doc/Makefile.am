@@ -26,12 +26,12 @@
 
 if SPHINX
 doc-man:
-	$(SPHINX_BUILD) -q \
+	$(SPHINX_BUILD) \
 	-D "release=$(TIFF_TOOLS_VERSION)" \
 	-D "version=$(TIFF_TOOLS_MAJOR_VERSION).$(TIFF_TOOLS_MINOR_VERSION)" \
 	-d "$(builddir)/cache" \
 	-b man \
-	"$(srcdir)" "$(builddir)/man" $(rst_sources)
+	"$(srcdir)" "$(builddir)/man"
 
 man1_MANS = $(TIFF_MAN1_GEN)
 
@@ -50,7 +50,6 @@ doc-man:
 
 man1_MANS = $(TIFF_MAN1_PREBUILT)
 endif
-
 
 rst_sources = \
 	tiffgt.rst \
@@ -77,6 +76,7 @@ rst_sources = \
 
 EXTRA_DIST = \
 	conf.py \
+	index.rst \
 	$(rst_sources)
 
 dist-hook: doc-html doc-man
