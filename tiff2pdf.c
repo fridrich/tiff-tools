@@ -309,8 +309,6 @@ void t2p_read_tiff_size(T2P *, TIFF *);
 void t2p_read_tiff_size_tile(T2P *, TIFF *, ttile_t);
 int t2p_tile_is_right_edge(T2P_TILES, ttile_t);
 int t2p_tile_is_bottom_edge(T2P_TILES, ttile_t);
-int t2p_tile_is_edge(T2P_TILES, ttile_t);
-int t2p_tile_is_corner_edge(T2P_TILES, ttile_t);
 tsize_t t2p_readwrite_pdf_image(T2P *, TIFF *, TIFF *);
 tsize_t t2p_readwrite_pdf_image_tile(T2P *, TIFF *, TIFF *, ttile_t);
 #ifdef OJPEG_SUPPORT
@@ -332,7 +330,6 @@ tsize_t t2p_sample_lab_signed_to_unsigned(tdata_t, uint32_t);
 tsize_t t2p_write_pdf_header(T2P *, TIFF *);
 tsize_t t2p_write_pdf_obj_start(uint32_t, TIFF *);
 tsize_t t2p_write_pdf_obj_end(TIFF *);
-tsize_t t2p_write_pdf_name(const unsigned char *, TIFF *);
 tsize_t t2p_write_pdf_string(const char *, TIFF *);
 tsize_t t2p_write_pdf_stream(tdata_t, tsize_t, TIFF *);
 tsize_t t2p_write_pdf_stream_start(TIFF *);
@@ -2421,30 +2418,6 @@ int t2p_tile_is_bottom_edge(T2P_TILES tiles, ttile_t tile)
     }
 }
 
-/*
- * This function returns a non-zero value when the tile is a right edge tile
- * or a bottom edge tile.
- */
-
-int t2p_tile_is_edge(T2P_TILES tiles, ttile_t tile)
-{
-
-    return (t2p_tile_is_right_edge(tiles, tile) |
-            t2p_tile_is_bottom_edge(tiles, tile));
-}
-
-/*
-        This function returns a non-zero value when the tile is a right edge
-   tile and a bottom edge tile.
-*/
-
-int t2p_tile_is_corner_edge(T2P_TILES tiles, ttile_t tile)
-{
-
-    return (t2p_tile_is_right_edge(tiles, tile) &
-            t2p_tile_is_bottom_edge(tiles, tile));
-}
-
 #if defined(JPEG_SUPPORT) || defined(OJPEG_SUPPORT)
 static const unsigned char jpeg_eof_marker[] = {0xff, 0xd9};
 #endif
@@ -4341,111 +4314,6 @@ tsize_t t2p_write_pdf_obj_end(TIFF *output)
     tsize_t written = 0;
 
     written += t2pWriteFile(output, (tdata_t) "endobj\n", 7);
-
-    return (written);
-}
-
-/*
-        This function writes a PDF name object to output.
-*/
-
-tsize_t t2p_write_pdf_name(const unsigned char *name, TIFF *output)
-{
-
-    tsize_t written = 0;
-    uint32_t i = 0;
-    char buffer[64];
-    uint16_t nextchar = 0;
-    size_t namelen = 0;
-
-    namelen = strlen((char *)name);
-    if (namelen > 126)
-    {
-        namelen = 126;
-    }
-    written += t2pWriteFile(output, (tdata_t) "/", 1);
-    for (i = 0; i < namelen; i++)
-    {
-        if (((unsigned char)name[i]) < 0x21)
-        {
-            snprintf(buffer, sizeof(buffer), "#%.2X", name[i]);
-            buffer[sizeof(buffer) - 1] = '\0';
-            written += t2pWriteFile(output, (tdata_t)buffer, 3);
-            nextchar = 1;
-        }
-        if (((unsigned char)name[i]) > 0x7E)
-        {
-            snprintf(buffer, sizeof(buffer), "#%.2X", name[i]);
-            buffer[sizeof(buffer) - 1] = '\0';
-            written += t2pWriteFile(output, (tdata_t)buffer, 3);
-            nextchar = 1;
-        }
-        if (nextchar == 0)
-        {
-            switch (name[i])
-            {
-                case 0x23:
-                    snprintf(buffer, sizeof(buffer), "#%.2X", name[i]);
-                    buffer[sizeof(buffer) - 1] = '\0';
-                    written += t2pWriteFile(output, (tdata_t)buffer, 3);
-                    break;
-                case 0x25:
-                    snprintf(buffer, sizeof(buffer), "#%.2X", name[i]);
-                    buffer[sizeof(buffer) - 1] = '\0';
-                    written += t2pWriteFile(output, (tdata_t)buffer, 3);
-                    break;
-                case 0x28:
-                    snprintf(buffer, sizeof(buffer), "#%.2X", name[i]);
-                    buffer[sizeof(buffer) - 1] = '\0';
-                    written += t2pWriteFile(output, (tdata_t)buffer, 3);
-                    break;
-                case 0x29:
-                    snprintf(buffer, sizeof(buffer), "#%.2X", name[i]);
-                    buffer[sizeof(buffer) - 1] = '\0';
-                    written += t2pWriteFile(output, (tdata_t)buffer, 3);
-                    break;
-                case 0x2F:
-                    snprintf(buffer, sizeof(buffer), "#%.2X", name[i]);
-                    buffer[sizeof(buffer) - 1] = '\0';
-                    written += t2pWriteFile(output, (tdata_t)buffer, 3);
-                    break;
-                case 0x3C:
-                    snprintf(buffer, sizeof(buffer), "#%.2X", name[i]);
-                    buffer[sizeof(buffer) - 1] = '\0';
-                    written += t2pWriteFile(output, (tdata_t)buffer, 3);
-                    break;
-                case 0x3E:
-                    snprintf(buffer, sizeof(buffer), "#%.2X", name[i]);
-                    buffer[sizeof(buffer) - 1] = '\0';
-                    written += t2pWriteFile(output, (tdata_t)buffer, 3);
-                    break;
-                case 0x5B:
-                    snprintf(buffer, sizeof(buffer), "#%.2X", name[i]);
-                    buffer[sizeof(buffer) - 1] = '\0';
-                    written += t2pWriteFile(output, (tdata_t)buffer, 3);
-                    break;
-                case 0x5D:
-                    snprintf(buffer, sizeof(buffer), "#%.2X", name[i]);
-                    buffer[sizeof(buffer) - 1] = '\0';
-                    written += t2pWriteFile(output, (tdata_t)buffer, 3);
-                    break;
-                case 0x7B:
-                    snprintf(buffer, sizeof(buffer), "#%.2X", name[i]);
-                    buffer[sizeof(buffer) - 1] = '\0';
-                    written += t2pWriteFile(output, (tdata_t)buffer, 3);
-                    break;
-                case 0x7D:
-                    snprintf(buffer, sizeof(buffer), "#%.2X", name[i]);
-                    buffer[sizeof(buffer) - 1] = '\0';
-                    written += t2pWriteFile(output, (tdata_t)buffer, 3);
-                    break;
-                default:
-                    written += t2pWriteFile(output, (tdata_t)&name[i], 1);
-            }
-        }
-        nextchar = 0;
-    }
-    written += t2pWriteFile(output, (tdata_t) " ", 1);
 
     return (written);
 }

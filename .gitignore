@@ -2,6 +2,7 @@ aclocal.m4
 autom4te.cache
 configure
 Makefile.in
+Makefile
 config/compile
 config/config.guess
 config/config.h
@@ -11,6 +12,9 @@ config/depcomp
 config/install-sh
 config/ltmain.sh
 config/missing
+doc/Makefile.in
+doc/Makefile
+doc/__pycache__
 *.o
 *.la
 *.lo

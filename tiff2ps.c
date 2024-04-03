@@ -219,7 +219,6 @@ void PSDataColorContig(FILE *, TIFF *, uint32_t, uint32_t, int);
 void PSDataColorSeparate(FILE *, TIFF *, uint32_t, uint32_t, int);
 void PSDataPalette(FILE *, TIFF *, uint32_t, uint32_t);
 void PSDataBW(FILE *, TIFF *, uint32_t, uint32_t);
-void PSRawDataBW(FILE *, TIFF *, uint32_t, uint32_t);
 void Ascii85Init(void);
 void Ascii85Put(unsigned char code, FILE *fd);
 void Ascii85Flush(FILE *fd);
@@ -3085,114 +3084,6 @@ void PSDataBW(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
 #endif
 
     _TIFFfree(tf_buf);
-}
-
-void PSRawDataBW(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
-{
-    uint64_t *bc;
-    uint32_t bufsize;
-    int breaklen = MAXLINE;
-    tmsize_t cc;
-    uint16_t fillorder;
-    unsigned char *tf_buf;
-    unsigned char *cp, c;
-    tstrip_t s;
-
-#if defined(EXP_ASCII85ENCODER)
-    tsize_t ascii85_l;      /* Length, in bytes, of ascii85_p[] data */
-    uint8_t *ascii85_p = 0; /* Holds ASCII85 encoded data */
-#endif
-
-    (void)w;
-    (void)h;
-    TIFFGetFieldDefaulted(tif, TIFFTAG_FILLORDER, &fillorder);
-    TIFFGetField(tif, TIFFTAG_STRIPBYTECOUNTS, &bc);
-
-    /*
-     * Find largest strip:
-     */
-
-    bufsize = (uint32_t)bc[0];
-
-    for (s = 0; ++s < tf_numberstrips;)
-    {
-        if (bc[s] > bufsize)
-            bufsize = (uint32_t)bc[s];
-    }
-
-    tf_buf = (unsigned char *)limitMalloc(bufsize);
-    if (tf_buf == NULL)
-    {
-        TIFFError(filename, "No space for strip buffer");
-        return;
-    }
-
-#if defined(EXP_ASCII85ENCODER)
-    if (ascii85)
-    {
-        /*
-         * Allocate a buffer to hold the ASCII85 encoded data.  Note
-         * that it is allocated with sufficient room to hold the
-         * encoded data (5*bufsize/4) plus the EOD marker (+8)
-         * and formatting line breaks.  The line breaks are more
-         * than taken care of by using 6*bufsize/4 rather than
-         * 5*bufsize/4.
-         */
-
-        ascii85_p = limitMalloc((bufsize + (bufsize / 2)) + 8);
-
-        if (!ascii85_p)
-        {
-            _TIFFfree(tf_buf);
-
-            TIFFError(filename, "Cannot allocate ASCII85 encoding buffer.");
-            return;
-        }
-    }
-#endif
-
-    for (s = 0; s < tf_numberstrips; s++)
-    {
-        cc = TIFFReadRawStrip(tif, s, tf_buf, (tmsize_t)bc[s]);
-        if (cc < 0)
-        {
-            TIFFError(filename, "Can't read strip");
-            break;
-        }
-        if (fillorder == FILLORDER_LSB2MSB)
-            TIFFReverseBits(tf_buf, cc);
-        if (!ascii85)
-        {
-            for (cp = tf_buf; cc > 0; cc--)
-            {
-                DOBREAK(breaklen, 1, fd);
-                c = *cp++;
-                puthex(c, fd);
-            }
-            fputs(">\n", fd);
-            breaklen = MAXLINE;
-        }
-        else
-        {
-            Ascii85Init();
-#if defined(EXP_ASCII85ENCODER)
-            ascii85_l = Ascii85EncodeBlock(ascii85_p, 1, tf_buf, cc);
-
-            if (ascii85_l > 0)
-                fwrite(ascii85_p, ascii85_l, 1, fd);
-#else
-            for (cp = tf_buf; cc > 0; cc--)
-                Ascii85Put(*cp++, fd);
-            Ascii85Flush(fd);
-#endif /* EXP_ASCII85ENCODER */
-        }
-    }
-    _TIFFfree((char *)tf_buf);
-
-#if defined(EXP_ASCII85ENCODER)
-    if (ascii85_p)
-        _TIFFfree(ascii85_p);
-#endif
 }
 
 void Ascii85Init(void)
