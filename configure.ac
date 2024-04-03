@@ -237,7 +237,7 @@ fi
 
 dnl ---------------------------------------------------------------------------
 
-AC_CONFIG_HEADERS([config/config.h tiff_tools_config.h])
+AC_CONFIG_HEADERS([config/config.h])
 
 AC_CONFIG_FILES([Makefile doc/Makefile])
 AC_OUTPUT

@@ -25,7 +25,7 @@
 #ifndef _TIFF_TOOLS_INTERNAL_
 #define _TIFF_TOOLS_INTERNAL_
 
-#include "tiff_tools_config.h"
+#include "config.h"
 
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h>
@@ -117,10 +117,8 @@
   does not distribute the CRT (it is supplied by Microsoft) so the correct CRT
   must be available on the target computer in order for the program to run.
 */
-#if defined(HAVE_FSEEKO)
 #define fseek(stream, offset, whence) fseeko(stream, offset, whence)
-#define ftell(stream, offset, whence) ftello(stream, offset, whence)
-#endif
+#define ftell(stream) ftello(stream)
 #endif
 #if defined(__WIN32__) && !(defined(_MSC_VER) && _MSC_VER < 1400) &&           \
     !(defined(__MSVCRT_VERSION__) && __MSVCRT_VERSION__ < 0x800)
@@ -147,5 +145,22 @@ typedef size_t TIFFIOSize_t;
 extern void *_TIFFCheckMalloc(TIFF *, tmsize_t, tmsize_t, const char *);
 extern uint32_t _TIFFClampDoubleToUInt32(double);
 extern uint32_t _TIFFMultiply32(TIFF *, uint32_t, uint32_t, const char *);
+
+#if !defined(__MINGW32__)
+#  define TIFF_SIZE_FORMAT "zu"
+#endif
+#if SIZEOF_SIZE_T == 8
+#  define TIFF_SSIZE_FORMAT PRId64
+#  if defined(__MINGW32__)
+#    define TIFF_SIZE_FORMAT PRIu64
+#  endif
+#elif SIZEOF_SIZE_T == 4
+#  define TIFF_SSIZE_FORMAT PRId32
+#  if defined(__MINGW32__)
+#    define TIFF_SIZE_FORMAT PRIu32
+#  endif
+#else
+#  error "Unsupported size_t size; please submit a bug report"
+#endif
 
 #endif /* _TIFFIOP_ */

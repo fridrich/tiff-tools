@@ -36,7 +36,7 @@
  * OF THIS SOFTWARE.
  */
 
-#include "tiff_tools_config.h"
+#include "tiff_tools_internal.h"
 
 #include <limits.h>
 #include <stdio.h>

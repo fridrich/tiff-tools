@@ -26,7 +26,7 @@
  * OF THIS SOFTWARE.
  */
 
-#include "tiff_tools_config.h"
+#include "tiff_tools_internal.h"
 
 #include <ctype.h>
 #include <math.h>
@@ -53,7 +53,6 @@
 #endif
 
 #include <tiffio.h>
-#include "tiff_tools_internal.h"
 
 #ifndef EXIT_SUCCESS
 #define EXIT_SUCCESS 0

@@ -22,7 +22,7 @@
  * OF THIS SOFTWARE.
  */
 
-#include "tiff_tools_config.h"
+#include "tiff_tools_internal.h"
 
 #include <ctype.h>
 #include <stdio.h>
