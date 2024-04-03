@@ -172,6 +172,16 @@ dnl ---------------------------------------------------------------------------
 AC_SYS_LARGEFILE
 
 dnl ---------------------------------------------------------------------------
+dnl Enable or disable parts of the build
+dnl ---------------------------------------------------------------------------
+
+AC_ARG_ENABLE(tests,
+              AS_HELP_STRING([--disable-tests],
+                             [Disable building of tests]),
+                             [TIFF_TESTS=$enableval], [TIFF_TESTS=yes])
+AM_CONDITIONAL(TIFF_TESTS, test "$TIFF_TESTS" = "yes")
+
+dnl ---------------------------------------------------------------------------
 dnl Find libtiff.
 dnl ---------------------------------------------------------------------------
 PKG_CHECK_MODULES([LIBTIFF],[

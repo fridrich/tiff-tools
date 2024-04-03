@@ -55,9 +55,11 @@ noinst_HEADERS = \
 	tiffiop.h
 
 # Executable programs which need to be built in order to support tests
+if TIFF_TESTS
 check_PROGRAMS = \
 	rgb2ycbcr \
 	thumbnail
+endif
 
 fax2ps_SOURCES = fax2ps.c
 fax2ps_LDADD = $(LIBTIFF_LIBS)
