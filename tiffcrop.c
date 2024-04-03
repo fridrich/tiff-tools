@@ -127,8 +127,7 @@
  */
 /* clang-format on */
 
-#include "tiff_tools_config.h"
-#include "tiffiop.h"
+#include "tiff_tools_internal.h"
 
 #include <assert.h>
 #include <ctype.h>

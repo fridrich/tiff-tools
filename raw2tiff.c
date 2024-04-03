@@ -53,7 +53,7 @@
 #endif
 
 #include <tiffio.h>
-#include "tiffiop.h"
+#include "tiff_tools_internal.h"
 
 #ifndef EXIT_SUCCESS
 #define EXIT_SUCCESS 0

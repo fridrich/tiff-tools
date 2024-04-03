@@ -22,7 +22,7 @@
  * OF THIS SOFTWARE.
  */
 
-#include "tiff_tools_config.h"
+#include "tiff_tools_internal.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,7 +32,6 @@
 #include <unistd.h>
 #endif
 
-#include "tiffiop.h"
 
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h>

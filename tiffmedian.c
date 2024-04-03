@@ -38,7 +38,7 @@
  *	Siggraph '82 proceedings, pp. 297-307
  */
 
-#include "tiff_tools_config.h"
+#include "tiff_tools_internal.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -58,9 +58,6 @@
 #endif
 
 #define MAX_CMAP_SIZE 256
-
-#define streq(a, b) (strcmp(a, b) == 0)
-#define strneq(a, b, n) (strncmp(a, b, n) == 0)
 
 #define COLOR_DEPTH 8
 #define MAX_COLOR 256

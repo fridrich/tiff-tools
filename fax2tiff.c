@@ -25,7 +25,7 @@
 /*
  * Convert a CCITT Group 3 or 4 FAX file to TIFF Group 3 or 4 format.
  */
-#include "tiff_tools_config.h"
+#include "tiff_tools_internal.h"
 
 #include <stdio.h>
 #include <stdlib.h> /* should have atof & getopt */

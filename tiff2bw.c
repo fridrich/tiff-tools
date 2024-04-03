@@ -22,7 +22,7 @@
  * OF THIS SOFTWARE.
  */
 
-#include "tiff_tools_config.h"
+#include "tiff_tools_internal.h"
 
 #include <ctype.h>
 #include <stdio.h>
@@ -34,7 +34,6 @@
 #endif
 
 #include <tiffio.h>
-#include "tiffiop.h"
 
 #ifndef EXIT_SUCCESS
 #define EXIT_SUCCESS 0
@@ -42,6 +41,9 @@
 #ifndef EXIT_FAILURE
 #define EXIT_FAILURE 1
 #endif
+
+#define streq(a, b) (strcmp(a, b) == 0)
+#define strneq(a, b, n) (strncmp(a, b, n) == 0)
 
 /* x% weighting -> fraction of full color */
 #define PCT(x) (((x)*256 + 50) / 100)

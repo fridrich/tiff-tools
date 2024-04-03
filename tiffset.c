@@ -457,7 +457,7 @@ int main(int argc, char *argv[])
             fsize = TIFFftell(fp) + 1;
             rewind(fp);
 
-            if (fsize > 0xFFFFFFFFUL || /* MAXUINT32 = 0xFFFFFFFFUL */
+            if (fsize > (int64_t)0xFFFFFFFFUL || /* MAXUINT32 = 0xFFFFFFFFUL */
                 fsize >
                     TIFF_TMSIZE_T_MAX || /* for x32 tmsize_t is only int32_t */
                 fsize <= 0)

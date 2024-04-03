@@ -36,7 +36,7 @@
 #include <unistd.h>
 #endif
 
-#include "tiffiop.h"
+#include <tiffio.h>
 
 #ifndef EXIT_SUCCESS
 #define EXIT_SUCCESS 0
@@ -44,6 +44,8 @@
 #ifndef EXIT_FAILURE
 #define EXIT_FAILURE 1
 #endif
+
+#define streq(a, b) (strcmp(a, b) == 0)
 
 static TIFFErrorHandler old_error_handler = 0;
 static int status = EXIT_SUCCESS; /* exit status */
