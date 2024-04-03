@@ -56,7 +56,8 @@ bin_PROGRAMS += tiffgt
 endif
 
 noinst_HEADERS = \
-	tiffiop.h
+	tiffiop.h \
+	tiff_tools_internal.h
 
 fax2ps_SOURCES = fax2ps.c
 fax2ps_LDADD = $(LIBTIFF_LIBS)
