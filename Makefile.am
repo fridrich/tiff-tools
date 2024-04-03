@@ -23,6 +23,8 @@
 
 # Process this file with automake to produce Makefile.in.
 
+SUBDIRS = doc
+
 EXTRA_DIST = \
 	tif_tools_versioninfo.rc
 

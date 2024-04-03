@@ -1019,11 +1019,9 @@ AM_CONDITIONAL([SPHINX], [test "$BUILD_SPHINX" = yes -a "$SPHINX_BUILD" != no -a
 
 if test "x$PYTHON_BIN" != "x"; then
   AC_MSG_CHECKING([generated manual pages])
-  TIFF_MAN1_GEN=$(echo $("$PYTHON_BIN" "${srcdir}/cmake/list-manpages.py" "${srcdir}/doc" man | grep "\.1$"))
-  TIFF_MAN3_GEN=$(echo $("$PYTHON_BIN" "${srcdir}/cmake/list-manpages.py" "${srcdir}/doc" man | grep "\.3tiff$"))
-  TIFF_MAN_RULES=$("$PYTHON_BIN" "${srcdir}/cmake/list-manpages.py" "${srcdir}/doc" man | sed -e 's;$;: all-local;')
+  TIFF_MAN1_GEN=$(echo $("$PYTHON_BIN" "${srcdir}/list-manpages.py" "${srcdir}/doc" man | grep "\.1$"))
+  TIFF_MAN_RULES=$("$PYTHON_BIN" "${srcdir}/list-manpages.py" "${srcdir}/doc" man | sed -e 's;$;: all-local;')
   AC_SUBST([TIFF_MAN1_GEN])
-  AC_SUBST([TIFF_MAN3_GEN])
   AC_SUBST([TIFF_MAN_RULES])
   AM_SUBST_NOTMAKE([TIFF_MAN_RULES])
   AC_MSG_RESULT([done])
@@ -1032,9 +1030,7 @@ fi
 if test -d "${srcdir}/doc/man-prebuilt"; then
   AC_MSG_CHECKING([prebuilt manual pages])
   TIFF_MAN1_PREBUILT=$(echo $(cd "${srcdir}/doc" && ls -1 man-prebuilt/*.1))
-  TIFF_MAN3_PREBUILT=$(echo $(cd "${srcdir}/doc" && ls -1 man-prebuilt/*.3tiff))
   AC_SUBST([TIFF_MAN1_PREBUILT])
-  AC_SUBST([TIFF_MAN3_PREBUILT])
   AC_MSG_RESULT([done])
 fi
 
@@ -1042,7 +1038,7 @@ dnl ---------------------------------------------------------------------------
 
 AC_CONFIG_HEADERS([config/config.h tiff_tools_config.h])
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile doc/Makefile])
 AC_OUTPUT
 
 dnl ---------------------------------------------------------------------------
