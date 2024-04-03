@@ -220,15 +220,6 @@ struct tiff
     tmsize_t tif_max_single_mem_alloc; /* in bytes. 0 for unlimited */
 };
 
-struct TIFFOpenOptions
-{
-    TIFFErrorHandlerExtR errorhandler; /* may be NULL */
-    void *errorhandler_user_data;      /* may be NULL */
-    TIFFErrorHandlerExtR warnhandler;  /* may be NULL */
-    void *warnhandler_user_data;       /* may be NULL */
-    tmsize_t max_single_mem_alloc;     /* in bytes. 0 for unlimited */
-};
-
 #define isPseudoTag(t) (t > 0xffff) /* is tag value normal or pseudo */
 
 #define isTiled(tif) (((tif)->tif_flags & TIFF_ISTILED) != 0)
@@ -261,25 +252,6 @@ struct TIFFOpenOptions
 #define WriteOK(tif, buf, size) (TIFFWriteFile((tif), (buf), (size)) == (size))
 #endif
 
-/* NB: the uint32_t casts are to silence certain ANSI-C compilers */
-#define TIFFhowmany_32(x, y)                                                   \
-    (((uint32_t)x < (0xffffffff - (uint32_t)(y - 1)))                          \
-         ? ((((uint32_t)(x)) + (((uint32_t)(y)) - 1)) / ((uint32_t)(y)))       \
-         : 0U)
-/* Variant of TIFFhowmany_32() that doesn't return 0 if x close to MAXUINT. */
-/* Caution: TIFFhowmany_32_maxuint_compat(x,y)*y might overflow */
-#define TIFFhowmany_32_maxuint_compat(x, y)                                    \
-    (((uint32_t)(x) / (uint32_t)(y)) +                                         \
-     ((((uint32_t)(x) % (uint32_t)(y)) != 0) ? 1 : 0))
-#define TIFFhowmany8_32(x)                                                     \
-    (((x)&0x07) ? ((uint32_t)(x) >> 3) + 1 : (uint32_t)(x) >> 3)
-#define TIFFroundup_32(x, y) (TIFFhowmany_32(x, y) * (y))
-#define TIFFhowmany_64(x, y)                                                   \
-    ((((uint64_t)(x)) + (((uint64_t)(y)) - 1)) / ((uint64_t)(y)))
-#define TIFFhowmany8_64(x)                                                     \
-    (((x)&0x07) ? ((uint64_t)(x) >> 3) + 1 : (uint64_t)(x) >> 3)
-#define TIFFroundup_64(x, y) (TIFFhowmany_64(x, y) * (y))
-
 /* Safe multiply which returns zero if there is an *unsigned* integer overflow.
  * This macro is not safe for *signed* integer types */
 #define TIFFSafeMultiply(t, v, m)                                              \
@@ -289,8 +261,6 @@ struct TIFFOpenOptions
 
 #define TIFFmax(A, B) ((A) > (B) ? (A) : (B))
 #define TIFFmin(A, B) ((A) < (B) ? (A) : (B))
-
-#define TIFFArrayCount(a) (sizeof(a) / sizeof((a)[0]))
 
 /*
   Support for large files.
@@ -342,118 +312,13 @@ typedef size_t TIFFIOSize_t;
 #define _TIFF_off_t off_t
 #endif
 
-#if defined(__has_attribute) && defined(__clang__)
-#if __has_attribute(no_sanitize)
-#define TIFF_NOSANITIZE_UNSIGNED_INT_OVERFLOW                                  \
-    __attribute__((no_sanitize("unsigned-integer-overflow")))
-#else
-#define TIFF_NOSANITIZE_UNSIGNED_INT_OVERFLOW
-#endif
-#else
-#define TIFF_NOSANITIZE_UNSIGNED_INT_OVERFLOW
-#endif
-
 #if defined(__cplusplus)
 extern "C"
 {
 #endif
-    extern int _TIFFgetMode(TIFFOpenOptions *opts, thandle_t clientdata,
-                            const char *mode, const char *module);
-    extern int _TIFFNoRowEncode(TIFF *tif, uint8_t *pp, tmsize_t cc,
-                                uint16_t s);
-    extern int _TIFFNoStripEncode(TIFF *tif, uint8_t *pp, tmsize_t cc,
-                                  uint16_t s);
-    extern int _TIFFNoTileEncode(TIFF *, uint8_t *pp, tmsize_t cc, uint16_t s);
-    extern int _TIFFNoRowDecode(TIFF *tif, uint8_t *pp, tmsize_t cc,
-                                uint16_t s);
-    extern int _TIFFNoStripDecode(TIFF *tif, uint8_t *pp, tmsize_t cc,
-                                  uint16_t s);
-    extern int _TIFFNoTileDecode(TIFF *, uint8_t *pp, tmsize_t cc, uint16_t s);
-    extern void _TIFFNoPostDecode(TIFF *tif, uint8_t *buf, tmsize_t cc);
-    extern int _TIFFNoPreCode(TIFF *tif, uint16_t s);
-    extern int _TIFFNoSeek(TIFF *tif, uint32_t off);
-    extern void _TIFFSwab16BitData(TIFF *tif, uint8_t *buf, tmsize_t cc);
-    extern void _TIFFSwab24BitData(TIFF *tif, uint8_t *buf, tmsize_t cc);
-    extern void _TIFFSwab32BitData(TIFF *tif, uint8_t *buf, tmsize_t cc);
-    extern void _TIFFSwab64BitData(TIFF *tif, uint8_t *buf, tmsize_t cc);
-    extern int TIFFFlushData1(TIFF *tif);
-    extern int TIFFDefaultDirectory(TIFF *tif);
-    extern void _TIFFSetDefaultCompressionState(TIFF *tif);
-    extern int _TIFFRewriteField(TIFF *, uint16_t, TIFFDataType, tmsize_t,
-                                 void *);
-    extern int TIFFSetCompressionScheme(TIFF *tif, int scheme);
-    extern int TIFFSetDefaultCompressionState(TIFF *tif);
-    extern uint32_t _TIFFDefaultStripSize(TIFF *tif, uint32_t s);
-    extern void _TIFFDefaultTileSize(TIFF *tif, uint32_t *tw, uint32_t *th);
-
-    extern void _TIFFsetByteArray(void **, const void *, uint32_t);
-    extern void _TIFFsetByteArrayExt(TIFF *, void **, const void *, uint32_t);
-    extern void _TIFFsetShortArray(uint16_t **, const uint16_t *, uint32_t);
-    extern void _TIFFsetShortArrayExt(TIFF *, uint16_t **, const uint16_t *,
-                                      uint32_t);
-    extern void _TIFFsetLongArray(uint32_t **, const uint32_t *, uint32_t);
-    extern void _TIFFsetLongArrayExt(TIFF *, uint32_t **, const uint32_t *,
-                                     uint32_t);
-    extern void _TIFFsetFloatArray(float **, const float *, uint32_t);
-    extern void _TIFFsetFloatArrayExt(TIFF *, float **, const float *,
-                                      uint32_t);
-    extern void _TIFFsetDoubleArray(double **, const double *, uint32_t);
-    extern void _TIFFsetDoubleArrayExt(TIFF *, double **, const double *,
-                                       uint32_t);
-
-    extern void _TIFFprintAscii(FILE *, const char *);
-    extern void _TIFFprintAsciiTag(FILE *, const char *, const char *);
-
-    extern TIFFErrorHandler _TIFFwarningHandler;
-    extern TIFFErrorHandler _TIFFerrorHandler;
-    extern TIFFErrorHandlerExt _TIFFwarningHandlerExt;
-    extern TIFFErrorHandlerExt _TIFFerrorHandlerExt;
-    void _TIFFErrorEarly(TIFFOpenOptions *opts, thandle_t clientdata,
-                         const char *module, const char *fmt, ...)
-        TIFF_ATTRIBUTE((__format__(__printf__, 4, 5)));
-
-    extern uint32_t _TIFFMultiply32(TIFF *, uint32_t, uint32_t, const char *);
-    extern uint64_t _TIFFMultiply64(TIFF *, uint64_t, uint64_t, const char *);
-    extern tmsize_t _TIFFMultiplySSize(TIFF *, tmsize_t, tmsize_t,
-                                       const char *);
-    extern tmsize_t _TIFFCastUInt64ToSSize(TIFF *, uint64_t, const char *);
     extern void *_TIFFCheckMalloc(TIFF *, tmsize_t, tmsize_t, const char *);
-    extern void *_TIFFCheckRealloc(TIFF *, void *, tmsize_t, tmsize_t,
-                                   const char *);
-
-    extern double _TIFFUInt64ToDouble(uint64_t);
-    extern float _TIFFUInt64ToFloat(uint64_t);
-
-    extern float _TIFFClampDoubleToFloat(double);
     extern uint32_t _TIFFClampDoubleToUInt32(double);
-
-    extern void _TIFFCleanupIFDOffsetAndNumberMaps(TIFF *tif);
-
-    extern tmsize_t _TIFFReadEncodedStripAndAllocBuffer(TIFF *tif,
-                                                        uint32_t strip,
-                                                        void **buf,
-                                                        tmsize_t bufsizetoalloc,
-                                                        tmsize_t size_to_read);
-    extern tmsize_t _TIFFReadEncodedTileAndAllocBuffer(TIFF *tif, uint32_t tile,
-                                                       void **buf,
-                                                       tmsize_t bufsizetoalloc,
-                                                       tmsize_t size_to_read);
-    extern tmsize_t _TIFFReadTileAndAllocBuffer(TIFF *tif, void **buf,
-                                                tmsize_t bufsizetoalloc,
-                                                uint32_t x, uint32_t y,
-                                                uint32_t z, uint16_t s);
-    extern int _TIFFSeekOK(TIFF *tif, toff_t off);
-
-    extern int TIFFInitDumpMode(TIFF *, int);
-    extern const TIFFCodec _TIFFBuiltinCODECS[];
-    extern void TIFFCIELab16ToXYZ(TIFFCIELabToRGB *, uint32_t l, int32_t a,
-                                  int32_t b, float *, float *, float *);
-
-    extern void *_TIFFmallocExt(TIFF *tif, tmsize_t s);
-    extern void *_TIFFcallocExt(TIFF *tif, tmsize_t nmemb, tmsize_t siz);
-    extern void *_TIFFreallocExt(TIFF *tif, void *p, tmsize_t s);
-    extern void _TIFFfreeExt(TIFF *tif, void *p);
-
+    extern uint32_t _TIFFMultiply32(TIFF *, uint32_t, uint32_t, const char *);
 #if defined(__cplusplus)
 }
 #endif
