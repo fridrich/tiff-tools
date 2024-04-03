@@ -1,3 +1,5 @@
+:orphan:
+
 tiff2ps
 ========
 
