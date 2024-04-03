@@ -62,15 +62,13 @@ CFLAGS="$X_CFLAGS $CFLAGS"
 CPPFLAGS="$X_CFLAGS $CPPFLAGS"
 LDFLAGS="$X_LIBS $LDFLAGS"
 #
-AC_TRY_COMPILE([
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <X11/Intrinsic.h>
 #include <X11/Xaw/Text.h>
-],[int a;],
-[
+]], [[int a;]])],[
 # X11/Xaw/Text.h is in the standard search path.
 ice_cv_athena_includes=
-],
-[
+],[
 # X11/Xaw/Text.h is not in the standard search path.
 # Locate it and put its directory in `athena_includes'
 #
@@ -117,15 +115,13 @@ CFLAGS="$X_CFLAGS $CFLAGS"
 CPPFLAGS="$X_CFLAGS $CPPFLAGS"
 LDFLAGS="$X_LIBS $LDFLAGS"
 #
-AC_TRY_LINK([
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <X11/Intrinsic.h>
 #include <X11/Xaw/Text.h>
-],[XtToolkitInitialize();],
-[
+]], [[XtToolkitInitialize();]])],[
 # libXaw.a is in the standard search path.
 ice_cv_athena_libraries="yes"
-],
-[
+],[
 ice_cv_athena_libraries="no"
 ])
 #

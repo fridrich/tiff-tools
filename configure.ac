@@ -30,6 +30,8 @@ AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_MACRO_DIR(m4)
 AC_LANG(C)
 
+LT_INIT
+
 dnl Compute the canonical host (run-time) system type variable
 AC_CANONICAL_HOST
 
