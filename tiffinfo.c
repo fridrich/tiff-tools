@@ -22,8 +22,7 @@
  * OF THIS SOFTWARE.
  */
 
-#include "libport.h"
-#include "tif_config.h"
+#include "tiff_tools_config.h"
 
 #include <stdio.h>
 #include <stdlib.h>

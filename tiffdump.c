@@ -22,8 +22,7 @@
  * OF THIS SOFTWARE.
  */
 
-#include "libport.h"
-#include "tif_config.h"
+#include "tiff_tools_config.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,7 +46,7 @@
 #include <io.h>
 #endif
 
-#include "tiffio.h"
+#include <tiffio.h>
 
 #ifndef EXIT_SUCCESS
 #define EXIT_SUCCESS 0

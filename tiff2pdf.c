@@ -24,6 +24,8 @@
  * OF THIS SOFTWARE.
  */
 
+#include "tiff_tools_config.h"
+
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
@@ -44,9 +46,7 @@
 #include <io.h>
 #endif
 
-#include "libport.h"
-#include "tif_config.h"
-#include "tiffio.h"
+#include <tiffio.h>
 #include "tiffiop.h"
 
 #ifndef EXIT_SUCCESS

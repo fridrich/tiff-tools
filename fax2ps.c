@@ -21,8 +21,8 @@
  * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
  * OF THIS SOFTWARE.
  */
-#include "libport.h"
-#include "tif_config.h"
+
+#include "tiff_tools_config.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -42,7 +42,7 @@
 #include <io.h>
 #endif
 
-#include "tiffio.h"
+#include <tiffio.h>
 #include "tiffiop.h"
 
 #ifndef EXIT_SUCCESS

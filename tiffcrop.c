@@ -127,8 +127,7 @@
  */
 /* clang-format on */
 
-#include "libport.h"
-#include "tif_config.h"
+#include "tiff_tools_config.h"
 #include "tiffiop.h"
 
 #include <assert.h>
@@ -152,7 +151,7 @@
 #define EXIT_FAILURE 1
 #endif
 
-#include "tiffio.h"
+#include <tiffio.h>
 
 #ifndef PATH_MAX
 #define PATH_MAX 1024

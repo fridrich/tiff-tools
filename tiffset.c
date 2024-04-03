@@ -27,17 +27,13 @@
  ******************************************************************************
  */
 
-#include "tif_config.h"
+#include "tiff_tools_config.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "tiffio.h"
-
-#ifdef NEED_LIBPORT
-#include "libport.h"
-#endif
+#include <tiffio.h>
 
 #ifndef EXIT_SUCCESS
 #define EXIT_SUCCESS 0
